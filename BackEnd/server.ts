@@ -54,24 +54,36 @@ app.post("/register", async (req:any, res:any) => {
     });
 })
 
-app.post("/login", async (req:any, res:any) => {
+app.post("/login", (req:any, res:any) => {
     const email = req.body.email;
     const password = req.body.password;
-    const sql = "SELECT password AS ps FROM users WHERE email = ?";
+    const sql = "SELECT * FROM users WHERE email = ?";
     db.query(sql, [email], async (err:any,result:any) => {
+        const user = result[0];
         if(err){
             return res.status(500).json({message: "Erreur base de données"});
         }
         if(result.length === 0){
             return res.status(404).json({message: "Utilisateur inexistant"})
         }
-        const ps = result[0].ps;
+        const ps = user.password;
         if(await arg2.verify(ps, password)){
+            req.session.user = {
+                id : user.id,
+                username: user.username,
+                email: user.email
+            }
             return res.status(201).json({message: "Utilisateur connecté"})
         } else {
-            return res.status(501).json({message: "erreur?"})
+            return res.status(501).json({message: "erreur email ou mdp invalide"})
         }
     })
+})
+
+app.get('/status', (req:any, res:any) => {
+    if(req.session.user.id)
+        return res.status(201).json({logged: true});
+    else return res.status(500).json({logged: false})
 })
 
 app.listen(8082,"0.0.0.0",() => {

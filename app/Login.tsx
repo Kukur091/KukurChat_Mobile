@@ -7,10 +7,10 @@ export default function Login(){
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const navigation = useNavigation();
-    const back = axios.create({baseURL:"http://192.168.1.17/8082", withCredentials: true})
+    const back = axios.create({baseURL:"http://192.168.1.17:8082", withCredentials: true})
 
     const eventSubmit = () => {
-        back.post('/login', {email: email, password: password}).then(res => {navigation.navigate("Home")}).catch(err => {console.log(err)})
+        back.post("/login", {email: email, password: password}).then(res => {navigation.navigate("(tabs)", {screen: "index"})}).catch(err => {console.log(err)})
     };
 
     return(
