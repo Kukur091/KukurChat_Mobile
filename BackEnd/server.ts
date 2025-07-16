@@ -81,9 +81,23 @@ app.post("/login", (req:any, res:any) => {
 })
 
 app.get('/status', (req:any, res:any) => {
-    if(req.session.user.id)
+    if(req.session.user)
         return res.status(201).json({logged: true});
     else return res.status(500).json({logged: false})
+})
+
+app.post('/search', (req:any, res:any) => {
+    const sql = 'SELECT username FROM users WHERE username LIKE ?';
+    const userQuery = req.body.userQuery;
+    db.query(sql,[`%${userQuery}%`], (err:any, result: any) => {
+        if(err){
+            return res.status(500).json({message: "Erreur base de données"});
+        }
+        if(result.length === 0){
+            return res.status(201).json({result: "Aucuns utilisateurs n'a été trouvé"})
+        }
+        return res.status(201).json({result: result[0].username})
+    })
 })
 
 app.listen(8082,"0.0.0.0",() => {

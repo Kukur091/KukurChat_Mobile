@@ -2,17 +2,23 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function HomeScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const back = axios.create({baseURL:"http://192.168.1.17:8082", withCredentials: true})
   const [logged, setLogged] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+  const [result, setResult] = useState("");
 
   useFocusEffect(useCallback(() => {
-    back.get('/status').then(res => {setLogged(res.data.logged)}).catch(err => {})
+    back.get('/status').then(res => {setLogged(res.data.logged)}).catch(err => {});
+    back.post('/search', {userQuery: search}).then(res => setResult(res.data.result)).catch(err => {});
   }, [logged]))
 
+  const handleSubmit = () => {
+    back.post('/search', {userQuery: search}).then(res => setResult(res.data.result)).catch(err => {});
+  }
 
   return (
     <View style={{width: '100%', height: '100%', backgroundColor: "#141313", alignContent: "center"}}>
@@ -20,6 +26,9 @@ export default function HomeScreen() {
         <Text style={{color: "#D9D9D9", fontWeight: "bold", fontSize: 20}}>AppGestion</Text>
       </View>
       {!logged && (<TouchableOpacity onPress={() => {navigation.navigate("Login")}} style={{top: '30%', alignSelf: "center"}}><Text style={{color: "#D9D9D9", fontSize: 20}}>Login</Text></TouchableOpacity>)}
+      {logged && (<View><TextInput value={search} onChangeText={setSearch} placeholderTextColor={"#D9D9D9"} placeholder="Rechercher un utilisateur" style={{borderBottomColor: "#D9D9D9", borderBottomWidth: 1, marginBottom: 40, width: '80%', alignSelf: "center", top: 200, color: "#D9D9D9"}}></TextInput>
+      <TouchableOpacity onPress={handleSubmit} style={{top: '30%', alignSelf: "center"}}><Text style={{color: "#D9D9D9", fontSize: 20, top: 190}}>Chercher</Text></TouchableOpacity>
+      <Text style={{color: "#D9D9D9", fontSize: 20, top: 300, alignSelf: "center"}}>{result}</Text> </View>)}
     </View>
   );
 }
