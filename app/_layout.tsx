@@ -20,6 +20,8 @@ export default function RootLayout() {
     <ThemeProvider value={DarkTheme}> {/* pour dark et light theme plus tard colorScheme === 'dark' ? DarkTheme : DefaultTheme*/}
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="UserDepend" options={{headerShown: false}}/>
+        <Stack.Screen name="messages" options={{headerShown: false}}/>
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

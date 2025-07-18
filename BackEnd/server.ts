@@ -59,13 +59,13 @@ app.post("/login", (req:any, res:any) => {
     const password = req.body.password;
     const sql = "SELECT * FROM users WHERE email = ?";
     db.query(sql, [email], async (err:any,result:any) => {
-        const user = result[0];
         if(err){
             return res.status(500).json({message: "Erreur base de données"});
         }
         if(result.length === 0){
             return res.status(404).json({message: "Utilisateur inexistant"})
         }
+        const user = result[0];
         const ps = user.password;
         if(await arg2.verify(ps, password)){
             req.session.user = {
@@ -82,23 +82,35 @@ app.post("/login", (req:any, res:any) => {
 
 app.get('/status', (req:any, res:any) => {
     if(req.session.user)
-        return res.status(201).json({logged: true});
+        return res.status(200).json({logged: true});
     else return res.status(500).json({logged: false})
 })
 
 app.post('/search', (req:any, res:any) => {
-    const sql = 'SELECT username FROM users WHERE username LIKE ?';
+    const sql = 'SELECT * FROM users WHERE username LIKE ? LIMIT 4';
     const userQuery = req.body.userQuery;
     db.query(sql,[`%${userQuery}%`], (err:any, result: any) => {
         if(err){
             return res.status(500).json({message: "Erreur base de données"});
         }
         if(result.length === 0){
-            return res.status(201).json({result: "Aucuns utilisateurs n'a été trouvé"})
+            return res.status(200).json({result: "Aucuns utilisateurs n'a été trouvé"})
         }
-        return res.status(201).json({result: result[0].username})
+        return res.status(200).json({result: result[0]})
     })
 })
+
+app.get(`/get/:id`, (req:any, res:any) => {
+    const sql = 'SELECT * from users WHERE id = ?';
+    const id = req.params.id;
+    db.query(sql, [id], (err:any, result:any) => {
+        if(err){
+            return res.status(500).json({message: "Erreur base de données"});
+        }
+        return res.status(200).json({result: result[0]})
+    })
+})
+
 
 app.listen(8082,"0.0.0.0",() => {
     console.log("server backend en ligne sur le port 8082")
