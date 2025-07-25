@@ -102,7 +102,6 @@ L'application nécessite un serveur backend pour fonctionner. Pour le démarrer 
    DB_PASSWORD=your_database_password
    DB_NAME=kukurchat_db
    SESSION_SECRET=your_super_secret_session_key
-   PORT=3000
    ```
 
 4. **Démarrer le serveur backend**
@@ -112,15 +111,6 @@ L'application nécessite un serveur backend pour fonctionner. Pour le démarrer 
 
 ### Configuration de l'API côté mobile
 L'application se connecte au backend via l'URL configurée dans le code. Assurez-vous que l'URL correspond à votre serveur backend (par défaut: `http://localhost:3000`).
-
-## 🧪 Tests
-
-Lancer les tests :
-```bash
-npm test
-# ou
-yarn test
-```
 
 ## 📦 Build de production
 
