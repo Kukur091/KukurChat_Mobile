@@ -20,6 +20,13 @@ KukurChat Mobile est une application de messagerie privée développée avec **E
 - **React Navigation** - Navigation entre écrans
 - **Ionicons** - Bibliothèque d'icônes
 
+## To Do List: 
+- Creation de compte utilisateur -> ✅
+- Recherche d'utilisateurs parmis les utilisateurs existants -> ✅
+- Interface Globale (encore en travaille, l'UI n'est pas celui final, il reste pas mal de choses à revoir dessus) -> 🚧
+- Envois de messages sécurisées (pas encore commencé, lorsque je serai plus avancé je partagerai plus d'informations sur les moyens utilisés) -> 🚧
+- Affichage du Profil -> 🚧 (pas terminé l'UI est à refaire)
+  
 ## 📋 Prérequis
 
 Avant de commencer, assurez-vous d'avoir installé :
